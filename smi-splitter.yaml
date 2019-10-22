@@ -1,0 +1,20 @@
+apiVersion: split.smi-spec.io/v1alpha1
+kind: TrafficSplit
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"split.smi-spec.io/v1alpha1","kind":"TrafficSplit","metadata":{"annotations":{},"name":"reviews-rollout","namespace":"default"},"spec":{"backends":[{"service":"reviews-v2","weight":"500m"},{"service":"reviews-v3","weight":"500m"}],"service":"reviews"}}
+  creationTimestamp: "2019-10-21T17:55:39Z"
+  generation: 2
+  name: reviews-rollout
+  namespace: default
+  resourceVersion: "575482"
+  selfLink: /apis/split.smi-spec.io/v1alpha1/namespaces/default/trafficsplits/reviews-rollout
+  uid: fde95d09-f42b-11e9-a4b4-2eb56f472cff
+spec:
+  backends:
+  - service: reviews-v2
+    weight: 800m
+  - service: reviews-v3
+    weight: 200m
+  service: reviews
