@@ -14,7 +14,7 @@ metadata:
 spec:
   backends:
   - service: reviews-v2
-    weight: 800m
+    weight: 750m
   - service: reviews-v3
-    weight: 200m
+    weight: 250m
   service: reviews
