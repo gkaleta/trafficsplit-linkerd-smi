@@ -7,6 +7,6 @@ spec:
     service: simple-service
     backends:
     - service: simple-service-v1
-      weight: 1
+      weight: 750m
     - service: simple-service-v2
-      weight: 0
+      weight: 250m
