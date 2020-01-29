@@ -151,7 +151,6 @@ kubectl get trafficsplit -o yaml -n simple-service
 
 # vNEXT
 #1) Azure DevOps ~ GitOps demo!  
-https://dev.azure.com/gustav-aks-devopsproject/AKS-SMI-ServiceMesh/_releaseDefinition?definitionId=1&_a=environments-editor-preview
 #1.1) Demo: change weight (change cluster: 
 az aks get-credentials --name gustav-aks-linuxsummit --resource-group gustav-aks-smi-rg
 kubectl get trafficsplit -o yaml -n simple-service
