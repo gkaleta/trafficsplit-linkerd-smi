@@ -9,7 +9,7 @@ Deploy cluster:
 #set sp
 az ad sp create-for-rbac -n smi-sp --skip-assignment
 ##output from above:
-"appId": "7b211c00-e2f3-4465-a095-c1443b433761",
+"appId": "xxxx",
   "displayName": "smi-sp",
   "name": "http://smi-sp",
   "password": "xx",
