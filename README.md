@@ -15,10 +15,10 @@ az ad sp create-for-rbac -n smi-sp --skip-assignment
   "password": "xx",
   "tenant": "xx"
 
-#create resource-group in Westeurope
+# create resource-group in Westeurope
 az group create --name gustav-aks-linuxsummit-rg --location westeurope
 
-#create aks cluster with windows nodes
+# create aks cluster with windows nodes
 az aks create --resource-group gustav-aks-smi-rg \
 --name gustav-aks-linuxsummit \
 --node-count 3 \
@@ -36,13 +36,13 @@ az aks create --resource-group gustav-aks-smi-rg \
 
 
 Demo script:
-#Pre req
+# Pre req
 #1)Kubernetes cluster
 #2)Internet access!External Access
 #3)admin rights to install Linkerd and SMI spec
 #4) CI/CD (if times allows it)*
 
-##switch clusters:
+## switch clusters:
 ##1) az aks get-credentials --name gustav-aks-mesh --resource-group gustav-aks-mesh-rg (new)
 ##2) az aks get-credentials --name gustav-aks-linuxsummit --resource-group gustav-aks-smi-rg (old)
 
@@ -51,19 +51,19 @@ kubectl annotate namespaces simple-service linkerd.io/inject=enabled
 
 ----------------------------------------------------------------------------------------------------
 
-##Create namespace:
+## Create namespace:
 kubectl create namespace simple-service
 
-##Create simple-service
+## Create simple-service
 kubectl apply -f simple-service-v1.yaml
 
-##Run debug pod, which is ubuntu
+## Run debug pod, which is ubuntu
 kubectl apply -f debug-deployment.yaml
 
 ## View pod
 k get pods
 
-##Login to Ubuntu and update the service
+## Login to Ubuntu and update the service
  kubectl exec -it debug-xxxxxx bash
 #root@debug-5f7d54889f-k5s67:/# 
 apt update
@@ -73,33 +73,33 @@ curl simple-service-v1.simple-service.svc.cluster.local.
 
 ### result success == I´m a service v1root
 
-##Create the service (as root service for Traffic Split: https://github.com/deislabs/smi-spec/blob/master/traffic-split.md)
+##C reate the service (as root service for Traffic Split: https://github.com/deislabs/smi-spec/blob/master/traffic-split.md)
 kubectl apply -f simple-service-root.yaml
 
-##Login the Ubuntu pod and curl the new service
+## Login the Ubuntu pod and curl the new service
  kubectl exec -it debug-xxxx bash
 curl simple-service.simple-service.svc.cluster.local.
 
-##it works
+## it works
 
-##create the second service v2
+##c reate the second service v2
 kubectl apply -f simple-service-v2.yaml
 
-##login Ubuntu and curl service v2
+## login Ubuntu and curl service v2
 kubectl exec -it debug-xxxx bash
 
 curl simple-service-v2.simple-service.svc.cluster.local.
-###Result sucess == I'm new!! Service v2 
+### Result sucess == I'm new!! Service v2 
 
-#curl root service multiable times to check if it's running - SPAM it!:
+# curl root service multiable times to check if it's running - SPAM it!:
 for i in {1..10};do curl simple-service.simple-service.svc.cluster.local.; echo; done
 
-##The traffic split worked between v1 and v2, but it is NOT controlled!
-##We also did not use version labels for selector
+## The traffic split worked between v1 and v2, but it is NOT controlled!
+## We also did not use version labels for selector
 kubectl get svc/simple-service -n simple-service -o yaml 
 #### THIS IS WHERE INGRESS CONTROLLERS or SERVICE MESH SIDECARS SPIT INCOMING TRAFFIC TO VARIOUS DESTINATIONS ####
 
-##FIRST - INSTALL Linkerd in your K8s cluster
+## FIRST - INSTALL Linkerd in your K8s cluster
 linkerd install | kubectl apply -f -
 ###... should be done in 3 min
 
@@ -115,7 +115,7 @@ kubectl get deploy -o yaml -n simple-service | linkerd inject - | kubectl apply 
 #mTLS, Blue/Green Canary deployment... etc.
 
 
-##! If time allows it: kubectl describe pod/debug-5df9f65b74-2hvlg -n default (explain sidecars)
+## ! If time allows it: kubectl describe pod/debug-5df9f65b74-2hvlg -n default (explain sidecars)
 ## we now have support for default mTLS - secure communication, telemetry and more: https://linkerd.io/2/features/ 
 ## Lets do some Canary release with linkerd deployed, pods are meshed and all we need is TrafficSplit
 
@@ -133,7 +133,7 @@ kubectl get trafficsplits.split.smi-spec.io -o yaml -n simple-service
 kubectl exec -it debug-5df9f65b74-2hvlg bash
 for i in {1..10};do curl simple-service.simple-service.svc.cluster.local.; echo; done
 
-#the outgoing traffic isnt being controlled by linkerd. Let us mesh it now!
+# the outgoing traffic isnt being controlled by linkerd. Let us mesh it now!
 kubectl get deploy -o yaml | linkerd inject - | kubectl apply -f -
 
 #log into debug pod again (sorry for wait!)
@@ -143,10 +143,10 @@ apt install curl
 
 for i in {1..10};do curl simple-service.simple-service.svc.cluster.local.; echo; done
 
-#Let us edit trafficsplit weight
+# Let us edit trafficsplit weight
 kubectl edit trafficsplits.split.smi-spec.io -o yaml -n simple-service
 
-#let's verify configuration worked:
+# let's verify configuration worked:
 kubectl get trafficsplit -o yaml -n simple-service
 
 # vNEXT
